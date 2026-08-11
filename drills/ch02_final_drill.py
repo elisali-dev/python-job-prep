@@ -54,3 +54,6 @@ print (f"Annual income: ${annual_s:,.2f}")
 print (f"Monthly average: ${annual_s / 12:,.2f}")
 # Annual savings: $51,840.00
 print (f"Annual savings: ${annual_s * SAVINGS_RATE:,.2f}")
+
+# 写代码可以在任何 subfolder；准备 commit 时先回 repo root。
+# 因为 git add . 这里的 . 是： 当前 working directory 以及它下面的内容
