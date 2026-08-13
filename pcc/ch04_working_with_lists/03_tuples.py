@@ -48,6 +48,20 @@ value = (5) # 这不是 tuple，是 int。
 # 真正 one-element tuple：
 value = (5,)  # 关键是 comma。
 
+
+### Multiple Assignment REVISIT #### 
+# 之前说可以 x, y, z = 1, 2, 3
+# 可以 point = (10, 20)
+# x, y = point
+# ? 问题: python code 里面能把 
+# set_a = {1, 2, 3}
+# set_b = {3, 4, 5} 
+# 以上两个 assignment这个写成一行,然后两个 assignment 用逗号隔开吗? 比如 set_a = {1, 2, 3}, set_b = {3, 4, 5} ❌
+### 上一行后边的写法是不对的!!! 
+## 可以用multiple assignment的办法 写成: set_a, set_b = {1, 2, 3}, {3, 4, 5} ✅
+## 可以用 ; 分号隔开, In Python, a semicolon allows you to put multiple independent statements on a single line.
+# set_a = {1, 2, 3}; set_b = {3, 4, 5} ✅
+
 # ================ Exercise 1 — basic tuple ===================== 
 print(f"\n{'=' * 20} Exercise 1 — basic tuple {'=' * 20}")
 
