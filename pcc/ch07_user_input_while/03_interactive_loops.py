@@ -30,11 +30,97 @@ print(candidates)
 
 
 # ================ Exercise 5 ==================== 
-print(f"\n{'=' * 20} Exercise {'=' * 20}")
+print(f"\n{'=' * 20} Exercise 5 {'=' * 20}")
+
+prompt = (
+"1. Add candidate\n"
+"2. View candidates\n"
+"3. Quit\n"
+"Please enter your choice:" 
+)
+#BUG - 拼写错误
+# candiadtes =  []
+
+candidates = []
+
+while True:
+    choice = input(prompt)
+    if choice == "1":
+        c_name = input("Enter the name:")
+        c_socre = int(input("Enter the technical score:"))
+
+        candidate = {
+            "name": c_name,
+            "score": c_socre
+        }
+        candidates.append(candidate)
+    elif choice == '2':
+        if not candidates:
+            print("No candidates found.")
+        else:
+            counter = 1
+            for i in candidates:
+                print(f"====#{counter} candidate====\n"
+                      f"    name: {i["name"]}\n"
+                      f"    score: {i["score"]}"
+                      )
+                counter +=1 
+    elif choice == '3':
+        break
+
+    else:
+        print("Invalid options") 
 
 # ================ Exercise 6 ==================== 
-print(f"\n{'=' * 20} Exercise 4 — Break {'=' * 20}")
+print(f"\n{'=' * 20} Exercise 6 {'=' * 20}")
 
 
-# ================ Closed Book Drill ==================== 
-print(f"\n{'=' * 20} Drill {'=' * 20}")
+prompt = (
+"1. Add candidate\n"
+"2. View candidates\n"
+"3. Quit\n"
+"Please enter your choice:" 
+)
+
+#BUG 拼写错误
+# candiadtes =  []
+
+candidates = []
+
+while True:
+    choice = input(prompt)
+    if choice == "1":
+        c_name = input("Enter the name:")
+        c_experience = int(input("Enter years of experience: "))
+        # BUG - 拼写错误 - syntax 没问题，但 naming quality 有问题。
+        # c_socre = int(input("Enter the technical score:"))
+        # 因为你定义和使用都拼成同一个错误，所以 Python 不会报错. 但还是应该改
+        c_score = int(input("Enter the technical score:"))
+    
+        candidate = {
+            "name": c_name,
+            "experience": c_experience,
+            "score": c_score
+        }
+        candidates.append(candidate)
+
+
+    elif choice == '2':
+        if not candidates:
+            print("No candidates found.")
+        else:
+            counter = 1
+            # NOTE: 虽然 i 没有问题, 但因为 i 通常容易让人以为是 integer index。而这里是指代的一个完整的 dictionary 所以把i 改成 candidate readability 更高. 
+            for i in candidates:
+                print(f"====#{counter} candidate====\n"
+                      f"    name: {i["name"]}\n"
+                      f"    experience: {i["experience"]}\n"
+                      f"    score: {i["score"]}"
+                      )
+                if i["experience"] >= 2 and i["score"] >= 75:
+                    print("Pass")
+                else: 
+                    print("Reject")
+                counter +=1 
+    else:
+        break
