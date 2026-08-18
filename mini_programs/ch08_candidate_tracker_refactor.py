@@ -1,3 +1,15 @@
+# 这个program 暴露的问题
+
+    # data structure 前后不一致
+    # function contract 不一致
+    # duplicated business logic
+    # counter / state 放在哪里
+    # boundary condition
+    # copy-paste 后 key/name 没同步
+    # return indentation 改变 control flow
+
+## NOTE program design/ application coding - 决定哪里应该是 function、这个 function 接收什么、return 什么、谁负责什么。
+
 # Refactor 不是把每三行代码都变成 function。
 # 
 # 目标是让程序：
