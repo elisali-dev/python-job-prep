@@ -1,0 +1,23 @@
+[
+    {
+        "name": "Alex",
+        "years_experience": 3,
+        "technical_score": 82
+    },
+    {
+        "name": "Emma",
+        "years_experience": 6,
+        "technical_score": 92
+    },
+    {
+        "name": "Sam",
+        "years_experience": 1,
+        "technical_score": 90
+    },
+    {
+        "name": "John",
+        "years_experience": 4,
+        "technical_score": 65
+    }
+]
+
