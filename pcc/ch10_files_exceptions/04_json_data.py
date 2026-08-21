@@ -22,6 +22,11 @@
 # Python 怎么读取 JSON? 
 import json
 
+#NOTE Path("data.json") 不是 relative to .py file，而是 relative to： Path.cwd()
+# 这个取决于你terminal 正停留在哪个文件夹下面运行. 
+# 所以如果你今天在：python-job-prep/运行，明天又在：
+# python-job-prep/pcc/ch11_testing/运行，同一条 relative path 可能代表完全不同的位置。
+# 从 repo root 跑可以形成统一习惯：
 
 #### dumps(): converts a jason string to a python object ######
 

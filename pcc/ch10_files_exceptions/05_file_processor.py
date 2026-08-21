@@ -6,8 +6,6 @@ import json
 # 处理以后创建 candidate_report.json
 # 把每个 candidate record 加上 "decision": "Pass"/ "Reject"
 
-input_path = Path(__file__).parent/"candidates.json"
-output_path = Path(__file__).parent/"candidate_report.json"
 
 def load_candidates(path):
     """
@@ -21,9 +19,6 @@ def load_candidates(path):
     # NOTE 第二种写法 with path.open("r", encoding="utf-8") as file:
                         # return json.load(file)
     # NOTE 第三种写法 return json.loads(path.read_text(encoding="utf-8"))
-
-    
-
 
 
 def validate_candidate(candidate):
@@ -71,9 +66,76 @@ def validate_candidate(candidate):
 
 
 
+def get_experience_level(candidate):
+    if candidate["years_experience"] >= 5:
+        return "Senior"
+    elif 2<= candidate["years_experience"] <5:
+        return "Mid"
+    elif 0<= candidate["years_experience"] <2:
+        return "Entry"
+    return "Invalid Input"
+
+# 简化版本写法
+# 一个地方已经负责 validation，后面的 function 可以基于这个 contract 工作。
+def get_experience_level(candidate):
+    years = candidate["years_experience"]
+
+    if years >= 5:
+        return "Senior"
+    elif years >= 2:
+        return "Mid"
+    else:
+        return "Entry"
+
+
+def is_qualified(candidate):
+    return candidate["years_experience"] >=2 and candidate["technical_score"] >= 75 
+
+def build_report(candidates):
+    report = []
+
+    for candidate in candidates:
+        validate_candidate(candidate)
+        name = candidate["name"]
+        experience_level = get_experience_level(candidate)
+        score = candidate["technical_score"]
+        report_record = {
+            "name": name,
+            "experience_level": experience_level,
+            "technical_score": score
+        } 
+        if is_qualified(candidate):
+            report_record["decision"] = "Pass"
+        else:
+            report_record["decision"] = "Reject"
+        report.append(report_record)
+
+    return report 
+
+    
+def save_report(report, path):
+    with path.open("w",encoding="utf-8") as file:
+        json.dump(report, file,indent=4)
 
 
 
+input_path = Path(__file__).parent/"candidates.json"
+output_path = Path(__file__).parent/"candidate_report.json"
 
+try:
+    candidates = load_candidates(input_path)
+    report = build_report(candidates)
+    save_report(report, output_path)
+except FileNotFoundError:
+    print("File not found")
+except json.JSONDecodeError:
+    print("Decoding error")
+except KeyError as error:
+     print(f"Missing required field: {error}")
+except ValueError as error:
+    print(f"Invalid candidate data: {error}")
+else:
+    print(f"Processed {len(candidates)} candidates.\n"
+          f"Report saved to candidate_report.json")
 
         

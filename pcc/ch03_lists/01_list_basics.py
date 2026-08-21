@@ -31,6 +31,8 @@ print(f"\n{'=' * 20} EXER 1 {'=' * 20}")
 
 languages = ["python", "java", "sql", "javascript"]
 
+#NOTE Python 列表最后一个值后面可以有逗号，也可以没有。这被称为尾随逗号（trailing comma）。Python 语法允许这样做，并且解释器会自动忽略它。
+
 print(languages[0])
 print(languages[-1]) # last item using negative index 
 print(languages[2].upper())

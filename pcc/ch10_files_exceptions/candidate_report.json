@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Alex",
+        "experience_level": "Mid",
+        "technical_score": 82,
+        "decision": "Pass"
+    },
+    {
+        "name": "Emma",
+        "experience_level": "Senior",
+        "technical_score": 92,
+        "decision": "Pass"
+    },
+    {
+        "name": "Sam",
+        "experience_level": "Entry",
+        "technical_score": 90,
+        "decision": "Reject"
+    },
+    {
+        "name": "John",
+        "experience_level": "Mid",
+        "technical_score": 65,
+        "decision": "Reject"
+    }
+]
