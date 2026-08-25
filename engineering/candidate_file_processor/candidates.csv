@@ -1,0 +1,5 @@
+name,years_experience,technical_score,skills
+Alice Chen,6,88,Python|SQL|Docker|PyTorch
+Bob Smith,1,65,Python|Excel
+Carol Lee,3,78,Python|SQL|TensorFlow
+David Jones,8,92,Python|SQL|Docker|PyTorch|TensorFlow
