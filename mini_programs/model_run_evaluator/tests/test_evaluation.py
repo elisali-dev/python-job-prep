@@ -2,7 +2,16 @@ import pytest
 from model_evaluator.evaluation import (
     get_deployment_decision,
     get_performance_level,
+    get_capability_match,
 )
+
+
+REQUIRED_CAPABILITIES = {
+    "python",
+    "sql",
+    "pytorch",
+    "docker",
+}
 
 @pytest.mark.parametrize(
     # NOTE 将所有参数名写在一个双引号内，用逗号隔开。参数名与后面的中括号之间加上逗号。
@@ -15,37 +24,103 @@ from model_evaluator.evaluation import (
 def test_get_performance_level(accuracy, expected_result):
     assert get_performance_level(accuracy) == expected_result
 
-model_run_1 = {
-    "model_name": "test_model_v1",
-    "accuracy": 0.9,
+
+def test_get_capability_match():
+    model_capabilities = [
+        " Python ",
+        "SQL",
+        "python",
+        "PyTorch",
+        "GPU",
+    ]
+
+    result = get_capability_match(
+        model_capabilities,
+        REQUIRED_CAPABILITIES,
+    )
+
+    assert result["matched"] == {
+        "python",
+        "sql",
+        "pytorch",
+    }
+
+    assert result["missing"] == {
+        "docker",
+    }
+
+    assert result["extra"] == {
+        "gpu",
+    }
+
+
+ready_model = {
+    "model_name": "ready_model",
+    "accuracy": 0.90,
     "latency_ms": 80,
     "memory_mb": 1200,
+    "capabilities": [
+        "python",
+        "sql",
+        "pytorch",
+        "docker",
+    ],
 }
 
-model_run_2 = {
-    "model_name": "test_model_v2",
-    "accuracy": 0.9,
+slow_model = {
+    "model_name": "slow_model",
+    "accuracy": 0.90,
     "latency_ms": 150,
     "memory_mb": 1200,
+    "capabilities": [
+        "python",
+        "sql",
+        "pytorch",
+        "docker",
+    ],
 }
 
-model_run_3 = {
-    "model_name": "test_model_v3",
-    "accuracy": 0.75,
+missing_capability_model = {
+    "model_name": "missing_capability_model",
+    "accuracy": 0.95,
     "latency_ms": 50,
     "memory_mb": 1200,
+    "capabilities": [
+        "python",
+        "sql",
+        "pytorch",
+    ],
+}
+
+boundary_model = {
+    "model_name": "boundary_model",
+    "accuracy": 0.85,
+    "latency_ms": 100,
+    "memory_mb": 1200,
+    "capabilities": [
+        "python",
+        "sql",
+        "pytorch",
+        "docker",
+    ],
 }
 
 @pytest.mark.parametrize(
     "model_sample, expected_result",
     [
-        (model_run_1, "Recommend"),
-        (model_run_2, "Do Not Recommend"),
-        (model_run_3, "Do Not Recommend"),
+        (ready_model, "Recommend"),
+        (slow_model, "Do Not Recommend"),
+        (missing_capability_model, "Do Not Recommend"),
+        (boundary_model, "Recommend")
     ]
 )
 def test_get_deployment_decision(model_sample, expected_result):
-    assert get_deployment_decision(model_sample) == expected_result
+    assert(
+        get_deployment_decision(model_sample, REQUIRED_CAPABILITIES) 
+        == expected_result)
+
+
+
 
 
 # NOTE 
