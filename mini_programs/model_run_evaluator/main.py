@@ -29,12 +29,12 @@ def main():
 
     
     if validate_model_run(model_run):
-        print(f"Model: {model_run["model_name"]}")
-        print(f"Performance: {get_performance_level(model_run["accuracy"])}")
-        capability_result = get_capability_match(model_run["capabilities"], required_capabilities)
-        print(f"Matched Capabilities: {capability_result["matched"]}")
-        print(f"Missing Capabilities: {capability_result["missing"]}")
-        print(f"Extra Capabilities: {capability_result["extra"]}")
+        print(f"Model: {model_run['model_name']}")
+        print(f"Performance: {get_performance_level(model_run['accuracy'])}")
+        capability_result = get_capability_match(model_run['capabilities'], required_capabilities)
+        print(f"Matched Capabilities: {capability_result['matched']}")
+        print(f"Missing Capabilities: {capability_result['missing']}")
+        print(f"Extra Capabilities: {capability_result['extra']}")
 
         print(f"Deployment Decision: {get_deployment_decision(model_run, required_capabilities)}")
     else:

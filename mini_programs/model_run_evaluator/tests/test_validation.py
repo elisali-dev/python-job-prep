@@ -1,5 +1,11 @@
 # NOTE 用 python -m pytest -v command 去测试
 
+# LEARNING NOTE:
+# Running pytest from the repo root may fail for nested mini-projects
+# because their package directories are not directly on Python's import path.
+# Run tests from the individual project root until the repo is packaged/configured.
+
+
 # NOTE - 关于 from... import 
 # 在 Python 工程开发中，from 语句从哪个层级开始写，取决于你的项目根目录（Project Root）被设置为了哪里，以及你如何运行这个测试脚本。
 # 在 VS Code 或 PyCharm 等编辑器中，最标准、最不容易出错的方法是将最外层的项目根目录作为起点。

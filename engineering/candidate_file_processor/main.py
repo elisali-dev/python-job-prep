@@ -63,11 +63,11 @@ if __name__ == "__main__":
 
 # if __name__ == "__main__": 的实际用途
     # 当 Python 导入一个模块时，会把里面的代码从头到尾执行一遍。如果你在模块里写了测试代码，不希望别人导入时触发，就要用到这行判断：
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # 只有当你直接右键运行 main.py 时，下面这两行才会执行
     # # 如果别人 import my_module，下面这两行会被完全忽略
-    print("正在测试我的模块...")
-    print("Program starts")
+        # print("正在测试我的模块...")
+        # print("Program starts")
 
 
 #__name__ 和 "__main__" 怎么理解？
