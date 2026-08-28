@@ -1,6 +1,6 @@
 # 它只负责：candidate data 合不合法. separation of concerns
 
-def validate_candidate(candidate):
+def validate_candidate(candidate:dict[str,str|int|float|list[str]]) -> None:
 
     # 用花括号 {} 包裹了一组字符串，且没有 key: value 的键值对结构。这在 Python 中表示一个集合（Set），而不是字典
     required_fields = {
@@ -30,4 +30,47 @@ def validate_candidate(candidate):
     if not isinstance(candidate["skills"], list):
         raise ValueError("Skills must be a list.")
 
-    return True
+    # NOTE 没有意义 删除是更好更干净的设计
+    # valid   → 正常执行完毕 → None -> main block 继续运行
+    # invalid → raise ValueError -> 被 main catch
+    # return True
+
+
+"""
+Engineering 05A — Type Hints Basics
+
+1. Parameter hint
+
+def greet(name: str):
+
+2. Return hint
+
+def greet(name: str) -> str:
+
+3. No return value
+
+def validate_score(score: int) -> None:
+
+4. Type hints describe expected types.
+They do not enforce types at runtime.
+
+type hint != runtime validation
+
+5. Most valuable place for hints:
+function parameters + return values
+
+6. Think of function signatures as contracts:
+
+float -> str
+int -> None
+candidate -> evaluation
+
+7. File paths can use pathlib.Path
+
+from pathlib import Path
+
+def load_file(file_path: Path):
+    ...
+
+
+"""

@@ -11,7 +11,7 @@ REQUIRED_SKILLS = {
 }
 
 
-def get_experience_level(years_experience):
+def get_experience_level(years_experience:float) -> str:
     if years_experience < 2:
         return "Entry"
 
@@ -21,7 +21,7 @@ def get_experience_level(years_experience):
     return "Senior"
 
 
-def get_matched_skills(skills):
+def get_matched_skills(skills:list[str]) -> set[str]:
     normalized_skills = {
         skill.strip().lower()
         for skill in skills
@@ -32,11 +32,11 @@ def get_matched_skills(skills):
     return sorted(matched_skills)
 
 
-def evaluate_candidate(candidate):
+def evaluate_candidate(candidate:dict[str,str|int|float|list[str]]) -> dict[str,str|set[str]]:
     experience_level = get_experience_level(
         candidate["years_experience"]
     )
-
+    # NOTE set type 
     matched_skills = get_matched_skills(
         candidate["skills"]
     )

@@ -1,27 +1,21 @@
-Candidate: Alice Chen
+Candidate: Alice
 Experience: 6.0 years
 Level: Senior
 Technical Score: 88
 Matched Skills: docker, python, pytorch, sql
 Decision: Recommend
 
-Candidate: Bob Smith
-Experience: 1.0 years
-Level: Entry
-Technical Score: 65
-Matched Skills: python
-Decision: Do Not Recommend
+Candidate: Bob
+Status: Invalid
 
-Candidate: Carol Lee
-Experience: 3.0 years
-Level: Mid
-Technical Score: 78
-Matched Skills: python, sql, tensorflow
-Decision: Recommend
 
-Candidate: David Jones
+Candidate: Carol
+Status: Invalid
+
+
+Candidate: David
 Experience: 8.0 years
 Level: Senior
 Technical Score: 92
-Matched Skills: docker, python, pytorch, sql, tensorflow
+Matched Skills: docker, python, pytorch, sql
 Decision: Recommend

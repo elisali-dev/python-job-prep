@@ -1,4 +1,4 @@
-def format_candidate_report(candidate, evaluation):
+def format_candidate_report(candidate:dict[str,str|int|float|list[str]], evaluation:dict[str,str|set[str]]) -> str:
     matched_skills = evaluation["matched_skills"]
 
     if matched_skills:

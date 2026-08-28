@@ -1,10 +1,36 @@
 import pytest
 import csv
 from pathlib import Path
+from candidate_processor.file_io import parse_candidate_row
 
 BASE_DIR = Path(__file__).resolve().parent
 CSV_FILE = BASE_DIR/"test_candidates.csv"
 
+bad_row = {
+    "name": "Bob",
+    "years_experience": "hello",
+    "technical_score": "75",
+    "skills": "python|sql",
+}
+
+def test_parse_candidate_invalid_experience():
+    with pytest.raises (ValueError):
+        parse_candidate_row(bad_row)
+
+missing_field_row = {
+    "name": "Bob",
+    "years_experience": "3",
+    # technical_score missing
+    "skills": "python|sql",
+}
+
+def test_parse_candidate_missing_field():
+    with pytest.raises(KeyError):
+        parse_candidate_row(missing_field_row)
+
+
+
+"""
 def test_load_candidates():
     candidates = []
     with open(
@@ -31,5 +57,5 @@ def test_load_candidates():
     assert candidates[0]["skills"] == ["python", "sql"]
 
     # NOTE 在同一个测试函数（def test_...）中，pytest 执行断言是从上到下的。
-    # 只要其中一个 assert 失败（报错），Python 就会立刻抛出 AssertionError 并中断当前测试函数，后面的代码和 assert 都不会再运行了。
-            
+    # 只要其中一个 assert 失败（报错），Python 就会立刻抛出 AssertionError 并中断当前测试函数，后面的代码和 assert 都不会再运行了。         
+"""

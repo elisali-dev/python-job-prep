@@ -1,8 +1,11 @@
-
+import logging
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
+
 from candidate_processor.file_io import (
-    load_candidates,
+    load_candidate_rows,
+    parse_candidate_row,
     save_report,
 )
 from candidate_processor.report import (
@@ -18,47 +21,70 @@ from candidate_processor.validation import (
 
 BASE_DIR = Path(__file__).resolve().parent
 
-INPUT_FILE = BASE_DIR / "candidates.csv"
+INPUT_FILE = BASE_DIR / "candidates_eng04c.csv"
 OUTPUT_FILE = BASE_DIR / "candidate_report.txt"
 
 
-def main():
-    candidates = load_candidates(INPUT_FILE)
+def main() -> None:
+    logger.info("Program Starts!")
+
+    rows = load_candidate_rows(INPUT_FILE)
 
     reports = []
-
-    for candidate in candidates:
+    for row in rows:
         try:
+            candidate = parse_candidate_row(row)
             validate_candidate(candidate)
 
-        except ValueError as error:
+        except (ValueError, KeyError) as error: # error is exception object
             reports.append(
-                f"Candidate: {candidate.get('name', 'Unknown')}\n"
+                f"Candidate: {row.get('name', 'Unknown')}\n" 
+                # 因为如果 parse 失败, candidate["name"]都不存在, 所以要从 raw row 里取值
+                # error handling 不要假设失败步骤已经成功产生 output。
                 f"Status: Invalid\n"
-                f"Reason: {error}"
+                #f"Reason: {error}"
             )
-            continue
+            logger.warning(
+                "Skipping invalid candidate: %s", error 
+            )
+            continue 
+            # NOTE 只有当 except 块后面还有属于循环体的其他代码，而你希望发生异常时不要执行这些代码，才必须加 continue。
+            # NOTE logger.exception() vs logger.error()
+                # logger.exception() 它会自动记录当前 exception 信息，包括 traceback。一般放在：except:里面。
+                # logger.error() 这通常只记录 message： ERROR | Failed to save report: Permission denied
 
         evaluation = evaluate_candidate(candidate)
-
+                    
         report = format_candidate_report(
-            candidate,
-            evaluation,
-        )
-
+                                candidate,
+                                evaluation,
+                            )
+                
         reports.append(report)
 
+    logger.info("Loaded %d candidate rows", len(rows))
+
     full_report = "\n\n".join(reports)
+    # NOTE The argument inside .join() must be an iterable where EVERY single element inside it is a string.
+    # 这种用法是 Python 中非常经典的“列表收集 + 字符串连接”（List Append + String Join）模式。它通常用于高效地动态拼接大量文本。比 += 性能高很多
 
     print(full_report)
 
-    save_report(
+    try:
+        save_report(
         full_report,
-        OUTPUT_FILE,
-    )
+        OUTPUT_FILE,)
+    except OSError:
+        logger.exception("Failed to save candidate report")
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format = "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        datefmt= "%Y-%m-%d %H:%M:%S",
+        filename="candidate_processor.log"
+        )
     main()
 
 # if __name__ == "__main__": 的实际用途
@@ -120,3 +146,15 @@ if __name__ == "__main__":
 
 ================================================================================
 """
+
+
+####============= Learning NOTE on logging ================
+    # Expected problem
+    # + program continues
+    # → warning
+    # 
+    # Serious operation failure
+    # → error
+    # 
+    # Need traceback inside except
+    # → exception

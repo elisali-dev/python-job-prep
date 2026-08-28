@@ -1,0 +1,5 @@
+name,years_experience,technical_score,skills
+Alice,6,88,python|sql|docker|pytorch
+Bob,hello,75,python|sql|docker
+Carol,3,150,python|sql|pytorch
+David,8,92,python|sql|docker|pytorch
