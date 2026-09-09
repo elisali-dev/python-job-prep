@@ -1,5 +1,6 @@
 import csv
 import logging
+from pathlib import Path
 # Inner functions 不需要层层 try/except。Exception 默认会向上传；只有某一层要恢复、转换错误、增加 context，或决定 workflow policy 时，才在那一层 catch。
 # 一但你 handle 了 exception 它就不再向上传 exception 上一层即使设计了逻辑也 handle 不到了
 
@@ -115,6 +116,7 @@ def load_candidates(filename):
     return candidates
 """
 
-def save_report(report_text:str, filename:str) -> None:
+def save_report(report_text:str, filename:Path) -> None:
+    filename.parent.mkdir(parents=True, exist_ok=True)
     with open(filename, "w", encoding="utf-8") as file:
         file.write(report_text)

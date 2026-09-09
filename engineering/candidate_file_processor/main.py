@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+import argparse
 
 logger = logging.getLogger(__name__)
 
@@ -18,17 +19,75 @@ from candidate_processor.validation import (
     validate_candidate,
 )
 
+#parser = argparse.ArgumentParser() # create an object of ArgumentParser type
+#parser.add_argument("--input", type = Path) # means 告诉 parser：我的程序接受一个叫 --input 的 command-line argument。不是现在立刻读取 terminal, 只是定义 CLI 的规则
+## 这里的 type= Path 不是 type hint 是真的runtime conversion , 可以把 command line string 转换成 Path object
+#args = parser.parse_args() # 读取用户在 terminal 里传进来的 arguments，并按照前面的规则解析。
+##NOTE args 它不是dict, 也不是list, 它通常是一个 argparse.Namespace
+#args.input # 是 attribute access。
 
-BASE_DIR = Path(__file__).resolve().parent
+def configure_logging(verbose:bool) -> None:
+    level = logging.DEBUG if verbose else logging.INFO
 
-INPUT_FILE = BASE_DIR / "candidates_eng04c.csv"
-OUTPUT_FILE = BASE_DIR / "candidate_report.txt"
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        filename="candidate_processor.log",
+        filemode="a",
+    )
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description = "Process candidate data adn generate a report."
+    )
+    parser.add_argument(
+        "-i",
+        "--input",
+        type=Path,
+        required=True,
+        help="Path to the candidate CSV file.",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=Path,
+        default=Path("output/report.txt"),
+        help="Path for the generated report.",
+    )
+
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Enable detailed logging"
+    )
+
+
+
+    return parser.parse_args()
+
+
+#BASE_DIR = Path(__file__).resolve().parent
+
+#INPUT_FILE = BASE_DIR / "candidates_eng04c.csv"
+#OUTPUT_FILE = BASE_DIR / "candidate_report.txt"
 
 
 def main() -> None:
-    logger.info("Program Starts!")
+    args = parse_args()
+    configure_logging(args.verbose)
 
-    rows = load_candidate_rows(INPUT_FILE)
+  
+    logger.info("Program Starts!")
+    logger.debug("Input file is %s", args.input)
+    logger.debug("Output file is %s", args.output)
+
+    # rows = load_candidate_rows(INPUT_FILE)
+    rows = load_candidate_rows(args.input)
+    logger.info("Loaded %d candidate rows", len(rows))
+
+  
 
     reports = []
     for row in rows:
@@ -73,7 +132,8 @@ def main() -> None:
     try:
         save_report(
         full_report,
-        OUTPUT_FILE,)
+        #OUTPUT_FILE,
+        args.output,)
     except OSError:
         logger.exception("Failed to save candidate report")
 
