@@ -1,8 +1,14 @@
 import logging
 from pathlib import Path
 import argparse
+import os
+from dotenv import load_dotenv
 
-logger = logging.getLogger(__name__)
+
+from candidate_processor.config import (
+    get_app_env,
+    get_passing_score,
+)
 
 from candidate_processor.file_io import (
     load_candidate_rows,
@@ -19,12 +25,12 @@ from candidate_processor.validation import (
     validate_candidate,
 )
 
-#parser = argparse.ArgumentParser() # create an object of ArgumentParser type
-#parser.add_argument("--input", type = Path) # means 告诉 parser：我的程序接受一个叫 --input 的 command-line argument。不是现在立刻读取 terminal, 只是定义 CLI 的规则
-## 这里的 type= Path 不是 type hint 是真的runtime conversion , 可以把 command line string 转换成 Path object
-#args = parser.parse_args() # 读取用户在 terminal 里传进来的 arguments，并按照前面的规则解析。
-##NOTE args 它不是dict, 也不是list, 它通常是一个 argparse.Namespace
-#args.input # 是 attribute access。
+
+logger = logging.getLogger(__name__)
+
+ENV_FILE = Path(__file__).parent/".env"
+
+
 
 def configure_logging(verbose:bool) -> None:
     level = logging.DEBUG if verbose else logging.INFO
@@ -63,25 +69,73 @@ def parse_args():
         help="Enable detailed logging"
     )
 
+    parser.add_argument(
+    "--passing-score",
+    type=int,
+    default=None,
+    help="Override the configured passing score.",
+)
+
+
+
 
 
     return parser.parse_args()
 
 
-#BASE_DIR = Path(__file__).resolve().parent
+def get_passing_score() -> int: 
+    raw_score = os.getenv("PASSING_SCORE", "80")
+    try:
+        score = int(raw_score)
+    except ValueError as error:
+        logger.error ("Configuration error: %s",error)
+        raise
+    if score <0 or score > 100:
+        raise ValueError("PASSING_SCORE must be between 0 and 100")
 
-#INPUT_FILE = BASE_DIR / "candidates_eng04c.csv"
-#OUTPUT_FILE = BASE_DIR / "candidate_report.txt"
+    return score 
+
+
+
+
+
+
 
 
 def main() -> None:
+
+    load_dotenv(ENV_FILE)
+
     args = parse_args()
     configure_logging(args.verbose)
+
+    try:
+        passing_score = get_passing_score(
+            args.passing_score
+        )
+        app_env = get_app_env()
+
+    except ValueError as error:
+        logger.error(
+            "Configuration error: %s",
+            error
+        )
+        raise 
 
   
     logger.info("Program Starts!")
     logger.debug("Input file is %s", args.input)
     logger.debug("Output file is %s", args.output)
+
+    logger.info(
+        "Passing score: %d",
+        passing_score,
+    )
+
+    logger.info(
+        "Application environment: %s",
+        app_env,
+    )
 
     # rows = load_candidate_rows(INPUT_FILE)
     rows = load_candidate_rows(args.input)
@@ -112,7 +166,7 @@ def main() -> None:
                 # logger.exception() 它会自动记录当前 exception 信息，包括 traceback。一般放在：except:里面。
                 # logger.error() 这通常只记录 message： ERROR | Failed to save report: Permission denied
 
-        evaluation = evaluate_candidate(candidate)
+        evaluation = evaluate_candidate(candidate, passing_score)
                     
         report = format_candidate_report(
                                 candidate,

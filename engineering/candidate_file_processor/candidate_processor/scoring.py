@@ -32,7 +32,10 @@ def get_matched_skills(skills:list[str]) -> set[str]:
     return sorted(matched_skills)
 
 
-def evaluate_candidate(candidate:dict[str,str|int|float|list[str]]) -> dict[str,str|set[str]]:
+def evaluate_candidate(
+        candidate:dict[str,str|int|float|list[str]],
+        passing_score: int,
+        ) -> dict[str,str|set[str]]:
     experience_level = get_experience_level(
         candidate["years_experience"]
     )
@@ -42,7 +45,7 @@ def evaluate_candidate(candidate:dict[str,str|int|float|list[str]]) -> dict[str,
     )
 
     if (
-        candidate["technical_score"] >= 70
+        candidate["technical_score"] >= passing_score
         and len(matched_skills) >= 3
     ):
         decision = "Recommend"

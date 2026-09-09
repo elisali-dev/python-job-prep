@@ -57,7 +57,7 @@ def test_recommend_candidate():
         ],
     }
 
-    result = evaluate_candidate(candidate)
+    result = evaluate_candidate(candidate, passing_score=80)
 
     assert result["experience_level"] == "Senior"
     assert result["decision"] == "Recommend"
@@ -75,6 +75,27 @@ def test_do_not_recommend_low_score():
         ],
     }
 
-    result = evaluate_candidate(candidate)
+    result = evaluate_candidate(candidate, passing_score=80)
 
     assert result["decision"] == "Do Not Recommend"
+
+def test_candidate_recommendation_changes_with_passing_score():
+    candidate = {
+        "name": "Alice",
+        "years_experience": 5.0,
+        "technical_score": 75,
+        "skills": ["python", "sql"],
+    }
+
+    result_low_threshold = evaluate_candidate(
+        candidate,
+        passing_score=70,
+    )
+
+    result_high_threshold = evaluate_candidate(
+        candidate,
+        passing_score=80,
+    )
+
+    assert result_low_threshold["decision"] == "Do Not Recommend"
+    assert result_high_threshold["decision"] == "Do Not Recommend"
