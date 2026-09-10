@@ -17,7 +17,7 @@ Experience: 3.0 years
 Level: Mid
 Technical Score: 78
 Matched Skills: python, sql, tensorflow
-Decision: Recommend
+Decision: Do Not Recommend
 
 Candidate: David Jones
 Experience: 8.0 years

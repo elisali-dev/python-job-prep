@@ -77,28 +77,7 @@ def parse_args():
 )
 
 
-
-
-
     return parser.parse_args()
-
-
-def get_passing_score() -> int: 
-    raw_score = os.getenv("PASSING_SCORE", "80")
-    try:
-        score = int(raw_score)
-    except ValueError as error:
-        logger.error ("Configuration error: %s",error)
-        raise
-    if score <0 or score > 100:
-        raise ValueError("PASSING_SCORE must be between 0 and 100")
-
-    return score 
-
-
-
-
-
 
 
 
@@ -261,14 +240,3 @@ if __name__ == "__main__":
 ================================================================================
 """
 
-
-####============= Learning NOTE on logging ================
-    # Expected problem
-    # + program continues
-    # → warning
-    # 
-    # Serious operation failure
-    # → error
-    # 
-    # Need traceback inside except
-    # → exception
